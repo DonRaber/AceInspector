@@ -4,7 +4,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.declarative import declarative_base
-from validate_email import validate_email 
+from validate_email import validate_email
 from config import db, bcrypt
 
 import dns.resolver 
@@ -105,3 +105,50 @@ class Admin(User):
     
     id = db.Column(db.Integer, primary_key=True)
     company_name = db.Column(db.String)
+    
+# ----------------------------------------------------------------------------------------------------- 
+#                                                                                           CLASS SITE
+# ----------------------------------------------------------------------------------------------------- 
+
+class Site(db.Model, SerializerMixin):
+    __tablename__='sites'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    address = db.Column(db.String, unique=True)
+    ahj = db.Column(db.String)
+    notes = db.Column(db.String)
+    wo = db.Column(db.Integer)
+    po = db.Column(db.Integer)
+    
+    poc = db.Column(db.String) ## -- possible relationship to 'users'
+    
+    schedule_info = db.column(db.Datetime) ## -- should be related to 'tickets'
+    
+# ----------------------------------------------------------------------------------------------------- 
+#                                                                                         CLASS TICKET
+# ----------------------------------------------------------------------------------------------------- 
+
+class Ticket(db.Model, SerializerMixin):
+    __tablename__='Tickets'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    
+# ----------------------------------------------------------------------------------------------------- 
+#                                                                                      CLASS PROPOSALS
+# ----------------------------------------------------------------------------------------------------- 
+
+class Proposal(db.Model, SerializerMixin):
+    __tablename__='proposals'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    
+# ----------------------------------------------------------------------------------------------------- 
+#                                                                                           CLASS PARTS
+# ----------------------------------------------------------------------------------------------------- 
+
+class Part(db.Model, SerializerMixin):
+    __tablename__='parts'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    # GETS FREAKY HERE BABYYYYYYY! OH YEA!
