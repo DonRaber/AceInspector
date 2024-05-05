@@ -93,7 +93,7 @@ class Technician(User):
 class Client(User):
     __tablename__='clients'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     company_name = db.Column(db.String)
     
 # ----------------------------------------------------------------------------------------------------- 
@@ -103,7 +103,7 @@ class Client(User):
 class Admin(User):
     __tablename__='admins'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     company_name = db.Column(db.String)
     
 # ----------------------------------------------------------------------------------------------------- 
