@@ -16,8 +16,9 @@ class User(db.model, SerlializerMixin):
     __tablename__='users'
     
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)
-    email = db.Column(db.String)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+    email = db.Column(db.String, unique=True)
     _password_hash = db.Column(db.String)
     
     # -------------------
@@ -51,6 +52,13 @@ class User(db.model, SerlializerMixin):
             raise ValueError("Make sure your password has a capital letter in it")
         else:
             return password
+        
+    @validates('email')
+    def validates_email(self, key, email):
+        if 3 <= len(email):
+            return email
+        else:
+            raise ValueError('email must be between 3 and 15 characters, incusive!')
     
 # ----------------------------------------------------------------------------------------------------- 
 #                                                                                 SUB-CLASS TECHNICIAN
@@ -65,10 +73,19 @@ class Technician(User):
 # ----------------------------------------------------------------------------------------------------- 
 #                                                                                     SUB-CLASS CLIENT
 # ----------------------------------------------------------------------------------------------------- 
-    
+
 class Client(User):
     __tablename__='clients'
     
     id = db.Column(db.Integer, primary_key=True)
+    company_name = db.Column(db.String)
     
+# ----------------------------------------------------------------------------------------------------- 
+#                                                                                      SUB-CLASS ADMIN
+# ----------------------------------------------------------------------------------------------------- 
+
+class Admin(User):
+    __tablename__='admins'
     
+    id = db.Column(db.Integer, primary_key=True)
+    company_name = db.Column(db.String)
