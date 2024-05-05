@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StatusBar } from './.expo/node_modules/expo-status-bar/src/StatusBar';
+import { StyleSheet, Text, View, Image } from './.expo/node_modules/react-native/types';
 
 export default function App() {
   return (
