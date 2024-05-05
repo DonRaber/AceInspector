@@ -3,10 +3,14 @@ from sqlalchemy.sql import func
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.declarative import declarative_base
+from validate_email import validate_email 
+from config import db, bcrypt
 
+import dns.resolver 
 import re
 
-from config import db, bcrypt
+Base = declarative_base()
 
 # ----------------------------------------------------------------------------------------------------- 
 #                                                                                        CLASS USER
@@ -54,11 +58,23 @@ class User(db.model, SerlializerMixin):
             return password
         
     @validates('email')
-    def validates_email(self, key, email):
-        if 3 <= len(email):
-            return email
-        else:
-            raise ValueError('email must be between 3 and 15 characters, incusive!')
+    def validate_email(self, key, email):
+        email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if not re.match(email_regex, email):
+            raise ValueError("Invalid email format")
+
+        domain = email.split('@')[1]
+        try:
+            dns.resolver.resolve(domain, 'MX')
+        except dns.resolver.NXDOMAIN:
+            raise ValueError("Invalid email domain")
+        except dns.resolver.NoAnswer:
+            raise ValueError("Invalid email domain")
+
+        if not validate_email(email):
+            raise ValueError("Email does not exist")
+
+        return email
     
 # ----------------------------------------------------------------------------------------------------- 
 #                                                                                 SUB-CLASS TECHNICIAN
